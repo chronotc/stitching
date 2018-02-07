@@ -35,7 +35,7 @@ const resolvers = {
       label: 'theSub'
     }],
     users: () => [{
-      id: 123,
+      id: 3,
       name: 'Bob',
       subscription: {
         id: 111,
