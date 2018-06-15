@@ -4,6 +4,10 @@ const typeDefs = `
   extend type User {
     courses: [Course]
   }
+
+  extend type UpdateSubResponse {
+    course: Course
+  }
 `;
 
 const resolvers = mergeInfo => ({
@@ -19,9 +23,25 @@ const resolvers = mergeInfo => ({
             userId,
           },
           context,
-          info,
+          info
         );
       },
+    }
+  },
+  UpdateSubResponse: {
+    course: {
+      resolve(parent, args, context, info) {
+        const courseId = parent.courseId;
+        return mergeInfo.delegate(
+          'query',
+          'course',
+          {
+            courseId,
+          },
+          context,
+          info
+        );
+      }
     }
   }
 });

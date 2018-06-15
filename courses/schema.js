@@ -3,7 +3,8 @@ const { makeExecutableSchema } = require('graphql-tools');
 const typeDefs = `
   # the schema allows the following query:
   type Query {
-    courses(userId: Int): [Course]
+    courses(userId: String): [Course]
+    course(courseId: String): Course
   }
 
   type Course {
@@ -13,19 +14,30 @@ const typeDefs = `
   }
 `;
 
+const courses = [
+  {
+    id: 'course1',
+    userId: '3',
+    name: 'course 1'
+  },
+  {
+    id: 'course2',
+    userId: '6',
+    name: 'course 2'
+  },
+  {
+    id: 'course3',
+    userId: '6',
+    name: 'course 3'
+  }
+]
+
 const resolvers = {
   Query: {
     courses: (obj, args, context, info) => {
-      if (args.userId === 3) {
-        return [{
-          id: 'THIS',
-          userId: 'FREAKEN',
-          name: 'WORKS'
-        }];
-      }
-
-      return [];
-    }
+      return courses.filter(course => course.userId === args.userId)
+    },
+    course: (obj, args) => courses.find(course => course.id === args.courseId)
   }
 };
 
