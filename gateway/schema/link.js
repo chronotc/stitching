@@ -10,13 +10,13 @@ const typeDefs = `
   }
 `;
 
-const resolvers = mergeInfo => ({
+const resolvers = ({
   User: {
     courses: {
       fragment: `fragment UserFragment on User { id }`,
       resolve(parent, args, context, info) {
         const userId = parent.id;
-        return mergeInfo.delegate(
+        return info.mergeInfo.delegate(
           'query',
           'courses',
           {
@@ -32,7 +32,7 @@ const resolvers = mergeInfo => ({
     course: {
       resolve(parent, args, context, info) {
         const courseId = parent.courseId;
-        return mergeInfo.delegate(
+        return info.mergeInfo.delegate(
           'query',
           'course',
           {
