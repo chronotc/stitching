@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require('graphql-tools');
+'use strict';
 
 const typeDefs = `
   extend type User {
