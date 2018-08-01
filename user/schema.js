@@ -1,3 +1,4 @@
+'use strict';
 const { makeExecutableSchema } = require('graphql-tools');
 
 const typeDefs = `
