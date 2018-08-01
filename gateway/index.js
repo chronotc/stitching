@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
@@ -13,5 +15,4 @@ resolveSchema()
 
 app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' })); // if you want GraphiQL enabled
 
-console.log(`Gateway running on ${PORT}`)
-app.listen(PORT);
+app.listen(PORT, () => console.log(`Gateway running on ${PORT}`));
