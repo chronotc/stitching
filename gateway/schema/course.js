@@ -1,3 +1,5 @@
+'use strict';
+
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
 const { introspectSchema, makeRemoteExecutableSchema } = require('graphql-tools');
