@@ -1,10 +1,20 @@
 'use strict';
 
-const { mergeSchemas } = require('graphql-tools');
+const { mergeSchemas, transformSchema, FilterRootFields } = require('graphql-tools');
 const local = require('./local');
 
 const getUserSchema = require('./user');
 const getCourseSchema = require('./course');
+
+const transformCourseSchema = schema => {
+  const blacklistedQueries = ['courses', 'course'];
+
+  return transformSchema(schema, [
+    new FilterRootFields((operation, rootField) =>
+      operation === 'Query' && !blacklistedQueries.includes(rootField)
+    )
+  ]);
+};
 
 const typeDefs = `
   extend type User {
@@ -18,17 +28,22 @@ const typeDefs = `
 
 module.exports = () => Promise.all([
   getUserSchema(),
-  getCourseSchema()
+  getCourseSchema(),
 ])
 .then(([user, course]) => {
+
+  const transformedCourseSchema = transformCourseSchema(course);
+
   return mergeSchemas({
-    schemas: [local, user, course, typeDefs],
+    schemas: [local, user, transformedCourseSchema, typeDefs],
     resolvers: {
       User: {
         courses: {
           fragment: `fragment UserFragment on User { id }`,
           resolve(parent, args, context, info) {
+            console.log(parent);
             const userId = parent.id;
+
             return info.mergeInfo.delegateToSchema({
               schema: course,
               operation: 'query',
